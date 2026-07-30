@@ -2,6 +2,7 @@ import Link from "next/link";
 import Search from "./Search";
 import Nav from "./Nav";
 import { Button } from "@/components/ui/button";
+import { SignupDropdown } from "@/components/signup-dropdown";
 
 const Header = () => {
   return (
@@ -28,7 +29,7 @@ const Header = () => {
          
           <div className="flex items-center gap-4 flex-shrink-0">
 
-            <Link href="/supplier/register" className="hidden lg:flex">
+            <Link href="/signup/supplier" className="hidden lg:flex">
               <Button variant="ghost">
                 Become a supplier
               </Button>
@@ -42,11 +43,7 @@ const Header = () => {
               </Button>
             </Link>
 
-            <Link href="/signup">
-              <Button>
-                Sign Up
-              </Button>
-            </Link>
+            <SignupDropdown />
 
           </div>
         </div>
