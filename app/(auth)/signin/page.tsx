@@ -2,7 +2,6 @@
 "use client";
 
 import { FaGithub, FaGoogle } from "react-icons/fa";
-
 import { PasswordInput } from "@/components/password-input";
 import { Button } from "@/components/ui/button";
 import {
@@ -171,7 +170,11 @@ export function SignInForm() {
               </div>
             )}
 
-              Login
+            <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                          {form.formState.isSubmitting ? "signin in.. account..." : "signin"}
+                        </Button>
+
+              
            
 
             <div className="flex w-full flex-col items-center justify-between gap-2">
