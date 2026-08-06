@@ -9,6 +9,13 @@ import {
   Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { authClient } from "@/app/lib/auth-client";
 import { passwordSchema } from "@/app/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +25,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { CATEGORIES } from "@/app/lib/categories";
+
+
 
 const baseSchema = z.object({
   firstname: z.string().min(1, { message: "First name is required" }),
@@ -81,36 +91,36 @@ export function SignUpForm({ role }: SignUpFormProps) {
     },
   });
 
- async function onSubmit(values: SignUpValues) {
-  setError(null);
+  async function onSubmit(values: SignUpValues) {
+    setError(null);
 
-  const {
-    email, password, firstname, lastname, phone,
-    businessName, businessType, category, cacNumber,
-  } = values;
+    const {
+      email, password, firstname, lastname, phone,
+      businessName, businessType, category, cacNumber,
+    } = values;
 
-  const { error } = await authClient.signUp.email({
-    email,
-    password,
-    name: `${firstname} ${lastname}`,
-    callbackURL: "/dashboard",
-    firstname,
-    lastname,
-    phone,
-    role,
-    businessName: businessName ?? "",
-    ...(role === "BUYER"
-      ? { businessType: businessType ?? "" }
-      : { category: category ?? "", cacNumber: cacNumber ?? "" }),
-  });
+    const { error } = await authClient.signUp.email({
+      email,
+      password,
+      name: `${firstname} ${lastname}`,
+      callbackURL: role === "BUYER" ? "/dashboard/buyer" : "/dashboard/supplier",
+      firstname,
+      lastname,
+      phone,
+      role,
+      businessName: businessName ?? "",
+      ...(role === "BUYER"
+        ? { businessType: businessType ?? "" }
+        : { category: category ?? "", cacNumber: cacNumber ?? "" }),
+    });
 
-  if (error) {
-    setError(error.message || "Something went wrong");
-  } else {
-    toast.success("Signed up successfully");
-    router.push("/dashboard");
+    if (error) {
+      setError(error.message || "Something went wrong");
+    } else {
+      toast.success("Signed up successfully");
+      router.push(role === "BUYER" ? "/dashboard/buyer" : "/dashboard/supplier");
+    }
   }
-}
 
   return (
     <Card className="w-full max-w-md">
@@ -228,9 +238,20 @@ export function SignUpForm({ role }: SignUpFormProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Category</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g. Agro-commodities, Electronics" {...field} />
-                      </FormControl>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select your category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {CATEGORIES.map((cat) => (
+                            <SelectItem key={cat} value={cat}>
+                              {cat}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
