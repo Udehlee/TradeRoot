@@ -1,6 +1,4 @@
 import Link from "next/link";
-import Search from "./Search";
-import Nav from "./Nav";
 import { Button } from "@/components/ui/button";
 import { SignupDropdown } from "@/components/signup-dropdown";
 
@@ -8,7 +6,7 @@ const Header = () => {
   return (
     <div className="headerWrapper sticky top-0 z-50 shadow-sm">
       <header className="bg-white border-b border-gray-100">
-        <div className="container mx-auto max-w-7xl px-8 flex items-center gap-8 h-20">
+        <div className="container mx-auto max-w-7xl px-8 flex items-center justify-between h-20">
 
           <Link
             href="/"
@@ -22,11 +20,6 @@ const Header = () => {
             </span>
           </Link>
 
-          <div className="flex-1 max-w-2xl">
-            <Search />
-          </div>
-
-         
           <div className="flex items-center gap-4 flex-shrink-0">
 
             <Link href="/signup/supplier" className="hidden lg:flex">
@@ -48,8 +41,6 @@ const Header = () => {
           </div>
         </div>
       </header>
-
-      <Nav />
     </div>
   );
 };
